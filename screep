@@ -1,7 +1,7 @@
 #!/usr/bin/python2
 from sneakers import Exfil
 
-mod = "file"
+mod = "googleSpread"
 
 enc = ["b64"]
 
@@ -10,8 +10,8 @@ dataz = "very secret and private message"
 print Exfil.list_encoders()
 
 t = Exfil(mod, enc)
-t.set_channel_params({'sending': {'filename': 'test.txt'}})
-t.set_channel_params({'receiving': {'filename': 'test.txt'}})
+t.set_channel_params({'sending': {"keyfile": "key.json", "google_sheet":"helloworld"}})
+t.set_channel_params({'receiving': {"keyfile": "key.json", "google_sheet":"helloworld"}})
 t.set_encoder_params(enc[0], {})
 
 print t.channel_config()

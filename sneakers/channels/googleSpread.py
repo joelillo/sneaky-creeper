@@ -1,26 +1,24 @@
 # Authors: Gabriel Butterick and Bonnie Ishiguro
 
+
 import time
 import json
 import gspread
-from oauth2client.client import SignedJwtAssertionCredentials
+from oauth2client.service_account import ServiceAccountCredentials
 
 from sneakers.modules import Channel
 
-class GoogleSpread(Channel):
+class Googlespread(Channel):
     description = """\
         Posts data to Google Spreadsheets.
     """
 
     requiredParams = {
         'sending': {
-            'client_email': '',
-            'private_key': '',
-            'google_sheet': ''
-        },
+            'keyfile': '',
+            'google_sheet': ''},
         'receiving': {
-            'client_email': '',
-            'private_key': '',
+            'keyfile': '',
             'google_sheet': ''
         }
     }
@@ -31,12 +29,11 @@ class GoogleSpread(Channel):
 
         send_params = self.params['sending']
 
-        CLIENT_EMAIL = send_params['client_email']
-        PRIVATE_KEY = send_params['private_key']
+        KEYFILE = send_params['keyfile']
         GOOGLE_SPREAD = send_params['google_sheet']
 
         scope = ['https://spreadsheets.google.com/feeds']
-        credentials = SignedJwtAssertionCredentials(CLIENT_EMAIL, PRIVATE_KEY, scope)
+        credentials = ServiceAccountCredentials.from_json_keyfile_name(KEYFILE, scope)
         gc = gspread.authorize(credentials)
         sheet = gc.open(GOOGLE_SPREAD).sheet1
 
@@ -53,12 +50,11 @@ class GoogleSpread(Channel):
 
         rec_params = self.params['receiving']
 
-        CLIENT_EMAIL = rec_params['client_email']
-        PRIVATE_KEY = rec_params['private_key']
+        KEYFILE = rec_params['keyfile']
         GOOGLE_SPREAD = rec_params['google_sheet']
 
         scope = ['https://spreadsheets.google.com/feeds']
-        credentials = SignedJwtAssertionCredentials(CLIENT_EMAIL, PRIVATE_KEY, scope)
+        credentials = ServiceAccountCredentials.from_json_keyfile_name(KEYFILE, scope)
         gc = gspread.authorize(credentials)
         sheet = gc.open(GOOGLE_SPREAD).sheet1
 
